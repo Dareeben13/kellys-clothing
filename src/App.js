@@ -32,7 +32,7 @@ class App extends Component {
               // So we pull id from snapShot.id and the rest of the data from snapShot.data(). ...snapShot.data() pulls all the data from our sanpShot and set them into state.
             }
           })
-          console.log(this.state)
+          // console.log(this.state)
 
         })
 
