@@ -13,6 +13,30 @@ const config = {
     measurementId: "G-1PC4F7TRF6"
 };
 
+export const createUserProfileDocument = async (userAuth, additionalData) => {
+    if (!userAuth) return;  // If no user is signed in , just return
+
+    const userRef = firestore.doc(`users/${userAuth.uid}`)  // just creates a document in firestore with id of the signedIn user's Id i.e uid
+    const snapShot = await userRef.get()  // Getting a snapShot of the document created and saving it as userRef
+
+    if (!snapShot.exists) {
+        const { displayName, email } = userAuth;
+        const createAt = new Date();   // We want to also know when we made the document
+
+        try {
+            await userRef.set({  // the .set() method is just a firebase method for creating a document in the firestore with those properties
+                displayName,
+                email,
+                createAt,
+                ...additionalData
+            }) // 
+        } catch (error) {
+            console.log('error creating user', error.message)
+        }
+    }
+    return userRef;
+}
+
 
 
 firebase.initializeApp(config)

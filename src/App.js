@@ -6,7 +6,7 @@ import Homepage from './pages/homepage/homepage.component'
 import ShopPage from './pages/shop/shop'
 import SignInAndSingUpPage from './pages/signIn-and-signUp/signIn-and-signUp'
 import Header from './components/header/header'
-import { auth } from './firebase/firebase.utils'
+import { auth, createUserProfileDocument } from './firebase/firebase.utils'
 
 class App extends Component {
   state = { currentUser: null }
@@ -14,12 +14,38 @@ class App extends Component {
   unSubscribeFromAuth = null;
 
   componentDidMount() {
-    this.unSubscribeFromAuth = auth.onAuthStateChanged(user => {
-      this.setState({ currentUser: user });
+    this.unSubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
+      // this.setState({ currentUser: user });
 
-      console.log(user)
+      // createUserProfileDocument(user)
+
+      // WE WANT TO STORE THE DATABASE STORED USER IN OUR APPLICATION STATE
+      if (userAuth) {
+        const userRef = await createUserProfileDocument(userAuth)  // NOTE THAT createUserProfileDocument IS RETRUNING BACK THE UserRef Object
+
+        userRef.onSnapshot(snapShot => {
+          this.setState({
+            currentUser: {
+              id: snapShot.id,
+              ...snapShot.data()  // The onSnapShot is just a method used to get the snapShot of the UserRef, i.e the user object stored in the database. 
+              //  The setState call is like that because the user id is gotten from snapShot, while the rest of the data is gotten from snapShot.data() method
+              // So we pull id from snapShot.id and the rest of the data from snapShot.data(). ...snapShot.data() pulls all the data from our sanpShot and set them into state.
+            }
+          })
+          console.log(this.state)
+
+        })
+
+      } else {
+        this.setState({ currentUser: userAuth })
+
+        // We use else so that the setState calls don't fire twice.
+        // We are just checking to see if the userAuth returns null, then we set currentUser to null
+      }
     })
   }
+
+
 
   componentWillUnmount = () => {
     this.unSubscribeFromAuth()
