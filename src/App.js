@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Switch, Route } from 'react-router-dom'
+import { connect } from "react-redux";
 
 import './App.css';
 import Homepage from './pages/homepage/homepage.component'
@@ -7,13 +8,18 @@ import ShopPage from './pages/shop/shop'
 import SignInAndSingUpPage from './pages/signIn-and-signUp/signIn-and-signUp'
 import Header from './components/header/header'
 import { auth, createUserProfileDocument } from './firebase/firebase.utils'
+import { setCurrentUser } from './redux/user/user.action'
 
 class App extends Component {
-  state = { currentUser: null }
+
 
   unSubscribeFromAuth = null;
 
   componentDidMount() {
+
+    const { setCurrentUser } = this.props
+
+
     this.unSubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
       // this.setState({ currentUser: user });
 
@@ -24,24 +30,23 @@ class App extends Component {
         const userRef = await createUserProfileDocument(userAuth)  // NOTE THAT createUserProfileDocument IS RETRUNING BACK THE UserRef Object
 
         userRef.onSnapshot(snapShot => {
-          this.setState({
-            currentUser: {
-              id: snapShot.id,
-              ...snapShot.data()  // The onSnapShot is just a method used to get the snapShot of the UserRef, i.e the user object stored in the database. 
-              //  The setState call is like that because the user id is gotten from snapShot, while the rest of the data is gotten from snapShot.data() method
-              // So we pull id from snapShot.id and the rest of the data from snapShot.data(). ...snapShot.data() pulls all the data from our sanpShot and set them into state.
-            }
+          setCurrentUser({
+            id: snapShot.id,
+            ...snapShot.data()  // The onSnapShot is just a method used to get the snapShot of the UserRef, i.e the user object stored in the database. 
+            //  The setState call is like that because the user id is gotten from snapShot, while the rest of the data is gotten from snapShot.data() method
+            // So we pull id from snapShot.id and the rest of the data from snapShot.data(). ...snapShot.data() pulls all the data from our sanpShot and set them into state.
+
           })
           // console.log(this.state)
 
         })
 
-      } else {
-        this.setState({ currentUser: userAuth })
-
-        // We use else so that the setState calls don't fire twice.
-        // We are just checking to see if the userAuth returns null, then we set currentUser to null
       }
+      setCurrentUser(userAuth)
+
+      // We use else so that the setState calls don't fire twice.
+      // We are just checking to see if the userAuth returns null, then we set currentUser to null
+
     })
   }
 
@@ -54,7 +59,7 @@ class App extends Component {
   render() {
     return (
       <div className='App'>
-        <Header currentUser={this.state.currentUser} />
+        <Header />
         <Switch>
           <Route exact path="/" component={Homepage} />
           <Route path="/shop" component={ShopPage} />
@@ -66,4 +71,8 @@ class App extends Component {
   }
 }
 
-export default App;
+const mapDispatchToProps = dispatch => ({
+  setCurrentUser: user => dispatch(setCurrentUser(user))
+})
+
+export default connect(null, mapDispatchToProps)(App);
