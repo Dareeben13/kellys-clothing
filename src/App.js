@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Switch, Route } from 'react-router-dom'
+import { Switch, Route, Redirect } from 'react-router-dom'
 import { connect } from "react-redux";
 
 import './App.css';
@@ -32,7 +32,7 @@ class App extends Component {
         userRef.onSnapshot(snapShot => {
           setCurrentUser({
             id: snapShot.id,
-            ...snapShot.data()  // The onSnapShot is just a method used to get the snapShot of the UserRef, i.e the user object stored in the database. 
+            ...snapShot.data()  // The onSnapShot is just a method used to get t he snapShot of the UserRef, i.e the user object stored in the database. 
             //  The setState call is like that because the user id is gotten from snapShot, while the rest of the data is gotten from snapShot.data() method
             // So we pull id from snapShot.id and the rest of the data from snapShot.data(). ...snapShot.data() pulls all the data from our sanpShot and set them into state.
 
@@ -63,16 +63,19 @@ class App extends Component {
         <Switch>
           <Route exact path="/" component={Homepage} />
           <Route path="/shop" component={ShopPage} />
-          <Route path="/signin" component={SignInAndSingUpPage} />
+          <Route exact path="/signin" render={() => (this.props.currentUser ? (<Redirect to="/" />) : (<SignInAndSingUpPage />))} />
         </Switch>
-
       </div>
     )
   }
 }
 
+const mapStateToProps = ({ user }) => ({
+  currentUser: user.currentUser
+})
+
 const mapDispatchToProps = dispatch => ({
   setCurrentUser: user => dispatch(setCurrentUser(user))
 })
 
-export default connect(null, mapDispatchToProps)(App);
+export default connect(mapStateToProps, mapDispatchToProps)(App);
