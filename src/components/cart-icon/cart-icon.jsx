@@ -1,5 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
+import { createStructuredSelector } from "reselect";
 
 import { toggleCartHidden } from "../../redux/cart/cart.actions";
 import { selectCartItemsCount } from "../../redux/cart/cart.selectors";
@@ -24,8 +25,8 @@ const mapDispatchToProps = (dispatch) => ({
 // WE HAVE TO USE THE CONCEPT OF MEMOIZATION TO CACHE OUR ACUMMULATOR DATA TO PREVENT THE mapStateToProps
 // FROM UNNECESSARY RE-RENDERING , WHICH IS NOT GOOD FOR PERFORMANCE
 
-const mapStateToProps = (state) => ({
-  itemCount: selectCartItemsCount(state),
+const mapStateToProps = createStructuredSelector({
+  itemCount: selectCartItemsCount,
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(CartIcon);
