@@ -42,7 +42,7 @@ class SignUp extends React.Component {
       console.error(error);
     }
   };
-
+ 
   handleChange = (event) => {
     const { name, value } = event.target;
 

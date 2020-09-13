@@ -19,7 +19,7 @@ class App extends Component {
 
 
   unSubscribeFromAuth = null;
- 
+
   componentDidMount() {
 
     const { setCurrentUser } = this.props
@@ -37,7 +37,7 @@ class App extends Component {
         userRef.onSnapshot(snapShot => {
           setCurrentUser({
             id: snapShot.id,
-            ...snapShot.data()  // The onSnapShot is just a method used to get t he snapShot of the UserRef, i.e the user object stored in the database. 
+            ...snapShot.data()  // The onSnapShot is just a method used to get the snapShot of the UserRef, i.e the user object stored in the database. 
             //  The setState call is like that because the user id is gotten from snapShot, while the rest of the data is gotten from snapShot.data() method
             // So we pull id from snapShot.id and the rest of the data from snapShot.data(). ...snapShot.data() pulls all the data from our sanpShot and set them into state.
 
@@ -77,7 +77,7 @@ class App extends Component {
 }
 
 const mapStateToProps = createStructuredSelector({
-  currentUser: selectCurrentUser
+  currentUser: selectCurrentUser,
 })
 
 const mapDispatchToProps = dispatch => ({
@@ -85,3 +85,9 @@ const mapDispatchToProps = dispatch => ({
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
+
+
+// Query Reference object is an object that represents the "CURRENT" place in the database that we are querying
+
+
+
