@@ -27,6 +27,17 @@ export const selectCollection = memoize((collectionUrlParam) =>
     )
 )
 
+export const selectIsCollectionFetching = createSelector(
+    [selectShop],
+
+    shop => shop.isFetching
+)
+
+export const selectIsCollectionsLoaded = createSelector(
+    [selectShop],
+    shop => !!shop.collections //We want to convert the initial null value of collections into a boolean
+)
+
 
     // The logic above is just a logical selector to return the collectionUrlParam that is equall to value of our COLLECTION_ID_MAP keys
     // We are doing this because our URL parameter is a string whereas the id from each collection we wanna match is an integar number
