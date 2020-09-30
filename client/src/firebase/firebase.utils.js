@@ -86,11 +86,11 @@ export const convertCollectionsSnapshotToMap = (collections) => {
 }
 
 export const getCurrentUser = () => {
-    return new Promise((resolve ,reject) => {
+    return new Promise((resolve, reject) => {
         const unsubscribe = auth.onAuthStateChanged(userAuth => {
             unsubscribe();
             resolve(userAuth)
-        } , reject)
+        }, reject)
     })
 }
 
