@@ -1,10 +1,20 @@
-import { call, all, put, takeLatest } from 'redux-saga/effects'
+import { call, all, put, takeLatest, take } from 'redux-saga/effects'
 
 import UserActionTypes from '../user/user.types'
+import CartActionTypes from './cart.types'
+
 import { clearCart } from './cart.actions'
 
 export function* clearCartOnSignOut() {
     yield put(clearCart())
+}
+
+export function* clearCartOnPayment() {
+    yield put(clearCart())
+}
+
+export function* paymentSuccessClearCart() {
+    yield take(CartActionTypes.CLEAR_CART, clearCartOnPayment)
 }
 
 export function* onSignOutSuccess() {
@@ -13,6 +23,7 @@ export function* onSignOutSuccess() {
 
 export function* cartSagas() {
     yield (all([
-        call(onSignOutSuccess)
+        call(onSignOutSuccess),
+        call(paymentSuccessClearCart)
     ]))
 }

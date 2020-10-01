@@ -1,10 +1,13 @@
 import React from "react";
+import { connect } from 'react-redux'
+
+import CartActionTypes from '../../redux/cart/cart.types'
 
 import axios from "axios";
 
 import StripeCheckout from "react-stripe-checkout";
 
-const StripeCheckoutButton = ({ price }) => {
+const StripeCheckoutButton = ({ price, dispatch }) => {
   const priceForStripe = price * 100; // Because stripe expects our payment price to be in cents
 
   const publishableKey =
@@ -21,6 +24,7 @@ const StripeCheckoutButton = ({ price }) => {
     })
       .then((response) => {
         alert("Payment Successful");
+        dispatch({ type: CartActionTypes.CLEAR_CART })
       })
       .catch((error) => {
         // console.log("Payment error : ", JSON.parse(error));
@@ -46,4 +50,6 @@ const StripeCheckoutButton = ({ price }) => {
   );
 };
 
-export default StripeCheckoutButton;
+
+
+export default connect()(StripeCheckoutButton);
