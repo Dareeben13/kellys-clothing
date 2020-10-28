@@ -19,7 +19,22 @@ export const CollectionItemStyle = styled.div`
       opacity: 0.85;
       display: flex;
     }
+
   }
+      @media screen and (max-width : 800px){
+        width : 40vw;
+
+        &:hover {
+          .image {
+            opacity: unset;
+          }
+      
+          button {
+            opacity: unset;
+          }
+      
+        }
+      }
 `;
 
 export const ImageStyle = styled.div`
@@ -53,5 +68,12 @@ export const CustomButtonStyle = styled(CustomButton)`
   opacity: 0.7;
   position: absolute;
   top: 255px;
-  display: none;
+  display: none;;
+
+  @media screen and (max-width : 800px){
+    display : block;
+    opacity : 0.9;
+    min-width : unset;
+    padding : 0 10px;
+  }
 `;

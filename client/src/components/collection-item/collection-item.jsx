@@ -13,8 +13,6 @@ import {
   PriceSpanStyle,
 } from "./collection-item.styles";
 
-// import "./collection-item.scss";
-
 function CollectionItem({ item, addItem }) {
   const { name, price, imageUrl } = item;
   return (
