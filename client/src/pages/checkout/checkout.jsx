@@ -1,18 +1,39 @@
 import React from "react";
 import { connect } from "react-redux";
 import { createStructuredSelector } from "reselect";
+import { v4 as uuidv4 } from "uuid";
 
 import CheckOutItem from "../../components/checkout-item/checkout-item";
+import CustomButton from "../../components/custom-button/custom-button";
 import StripeCheckoutButton from "../../components/stripe-button/stripe-button";
 
-import {
-  selectCartItems,
-  selectCartTotal,
-} from "../../redux/cart/cart.selectors";
+import { selectCartItems, selectCartTotal } from "../../redux/cart/cart.selectors";
 
 import "./checkout.scss";
 
 function CheckoutPage({ cartItems, total }) {
+  const options = {
+    amount: total,
+    currency: "NGN",
+    domain: "sandbox",
+    key: "d62d69fc-6480-4c5a-a3d4-14ffe708bcaa",
+    email: "ebendare@gmail.com",
+    transactionref: uuidv4(),
+    customer_service_channel: "090865521212",
+    txn_charge: 1,
+    txn_charge_type: "flat",
+    onSuccess: (message) => {
+      console.log("Message!!!!!!!", message);
+    },
+  };
+
+  const onClick = () => {
+    if (window.VPayDropin) {
+      const { open, exit } = window.VPayDropin.create(options);
+      open();
+    }
+  };
+
   return (
     <div className="checkout-page">
       <div className="checkout-header">
@@ -43,7 +64,8 @@ function CheckoutPage({ cartItems, total }) {
         <br />
         4242 4242 4242 4242 - Exp: 01/20 - CVV: 123
       </div>
-      <StripeCheckoutButton price={total} />
+      <CustomButton onClick={() => onClick()}>Pay with VPay</CustomButton>
+      {/* <StripeCheckoutButton price={total} /> */}
     </div>
   );
 }
