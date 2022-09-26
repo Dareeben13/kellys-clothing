@@ -12,23 +12,22 @@ import { selectCartItems, selectCartTotal } from "../../redux/cart/cart.selector
 import "./checkout.scss";
 
 function CheckoutPage({ cartItems, total }) {
-  const options = {
-    amount: total,
-    currency: "NGN",
-    domain: "sandbox",
-    key: "d62d69fc-6480-4c5a-a3d4-14ffe708bcaa",
-    email: "ebendare@gmail.com",
-    transactionref: uuidv4(),
-    customer_service_channel: "090865521212",
-    txn_charge: 1,
-    txn_charge_type: "flat",
-    onSuccess: (message) => {
-      console.log("Message!!!!!!!", message);
-    },
-  };
-
   const onClick = () => {
     if (window.VPayDropin) {
+      const options = {
+        amount: total,
+        currency: "NGN",
+        domain: "sandbox",
+        key: "d62d69fc-6480-4c5a-a3d4-14ffe708bcaa",
+        email: "ebendare@gmail.com",
+        transactionref: uuidv4(),
+        customer_service_channel: "090865521212",
+        txn_charge: 1,
+        txn_charge_type: "flat",
+        onSuccess: (message) => {
+          console.log("Message!!!!!!!", message);
+        },
+      };
       const { open, exit } = window.VPayDropin.create(options);
       open();
     }
