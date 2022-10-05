@@ -17,8 +17,8 @@ function CheckoutPage({ cartItems, total }) {
       const options = {
         amount: total,
         currency: "NGN",
-        domain: "sandbox",
-        key: "d62d69fc-6480-4c5a-a3d4-14ffe708bcaa",
+        domain: "live",
+        key: "a49b2ce1-0841-4ff9-88ae-6c99ad50cdf6",
         email: "ebendare@gmail.com",
         transactionref: uuidv4(),
         customer_service_channel: "090865521212",
